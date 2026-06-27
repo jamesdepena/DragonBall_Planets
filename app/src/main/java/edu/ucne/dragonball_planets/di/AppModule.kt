@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import edu.ucne.dragonball_planets.data.remote.DragonBallApi
+import edu.ucne.dragonball_planets.data.remote.remotedatasource.PlanetRemoteDataSource
 import edu.ucne.dragonball_planets.data.repository.PlanetRepositoryImpl
 import edu.ucne.dragonball_planets.domain.repository.PlanetRepository
 import retrofit2.Retrofit
@@ -16,16 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideApi(moshi: Moshi): DragonBallApi {
-        return Retrofit.Builder()
-            .baseUrl("https://dragonball-api.com/api/")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-            .create(DragonBallApi::class.java)
-    }
 
     @Singleton
     @Provides
@@ -38,7 +29,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(api: DragonBallApi): PlanetRepository {
-        return PlanetRepositoryImpl(api)
+    fun provideApi(moshi: Moshi): DragonBallApi {
+        return Retrofit.Builder()
+            .baseUrl("https://dragonball-api.com/api/")
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+            .create(DragonBallApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRepository(remoteDataSource: PlanetRemoteDataSource): PlanetRepository {
+        return PlanetRepositoryImpl(remoteDataSource)
     }
 }
