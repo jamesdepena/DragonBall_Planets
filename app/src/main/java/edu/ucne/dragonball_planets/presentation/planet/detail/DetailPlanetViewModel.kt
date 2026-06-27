@@ -1,4 +1,4 @@
-package edu.ucne.dragonball_planets.presentation.detail
+package edu.ucne.dragonball_planets.presentation.planet.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.domain.usecase.GetPlanetDetailUseCase
+import edu.ucne.dragonball_planets.domain.planet.usecase.GetPlanetDetailUseCase
 import edu.ucne.dragonball_planets.presentation.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

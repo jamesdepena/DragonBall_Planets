@@ -1,6 +1,6 @@
-package edu.ucne.dragonball_planets.domain.usecase
+package edu.ucne.dragonball_planets.domain.planet.usecase
 
-import edu.ucne.dragonball_planets.domain.repository.PlanetRepository
+import edu.ucne.dragonball_planets.domain.planet.repository.PlanetRepository
 import javax.inject.Inject
 
 class GetPlanetsUseCase @Inject constructor(

@@ -1,7 +1,7 @@
-package edu.ucne.dragonball_planets.domain.repository
+package edu.ucne.dragonball_planets.domain.planet.repository
 
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.domain.model.Planet
+import edu.ucne.dragonball_planets.domain.planet.model.Planet
 import kotlinx.coroutines.flow.Flow
 
 interface PlanetRepository {

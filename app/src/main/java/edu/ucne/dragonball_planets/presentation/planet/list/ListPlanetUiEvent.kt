@@ -1,4 +1,4 @@
-package edu.ucne.dragonball_planets.presentation.list
+package edu.ucne.dragonball_planets.presentation.planet.list
 
 sealed interface ListPlanetUiEvent {
 
