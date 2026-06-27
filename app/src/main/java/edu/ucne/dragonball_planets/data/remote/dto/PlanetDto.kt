@@ -1,6 +1,6 @@
 package edu.ucne.dragonball_planets.data.remote.dto
 
-import edu.ucne.dragonball_planets.domain.model.Planet
+import edu.ucne.dragonball_planets.domain.planet.model.Planet
 
 data class PlanetResponseDto(
     val items: List<PlanetDto>

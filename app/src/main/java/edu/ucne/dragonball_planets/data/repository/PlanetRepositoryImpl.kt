@@ -2,8 +2,8 @@ package edu.ucne.dragonball_planets.data.repository
 
 import edu.ucne.dragonball_planets.data.remote.Resource
 import edu.ucne.dragonball_planets.data.remote.remotedatasource.PlanetRemoteDataSource
-import edu.ucne.dragonball_planets.domain.model.Planet
-import edu.ucne.dragonball_planets.domain.repository.PlanetRepository
+import edu.ucne.dragonball_planets.domain.planet.model.Planet
+import edu.ucne.dragonball_planets.domain.planet.repository.PlanetRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
