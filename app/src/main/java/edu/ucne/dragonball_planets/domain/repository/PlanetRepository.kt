@@ -1,16 +1,16 @@
 package edu.ucne.dragonball_planets.domain.repository
 
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
+import edu.ucne.dragonball_planets.domain.model.Planet
+import kotlinx.coroutines.flow.Flow
 
 interface PlanetRepository {
 
-    suspend fun getPlanets(
+    fun getPlanets(
         page: Int,
         limit: Int,
-        name: String?,
-        isDestroyed: Boolean?
-    ): Resource<List<PlanetDto>>
+        name: String?
+    ): Flow<Resource<List<Planet>>>
 
-    suspend fun getPlanetDetail(id: Int): Resource<PlanetDto>
+    fun getPlanetDetail(id: Int): Flow<Resource<Planet>>
 }
