@@ -1,10 +1,11 @@
-package edu.ucne.dragonball_planets.presentation.detail
+package edu.ucne.dragonball_planets.presentation.planet.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,18 +17,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.domain.model.Planet
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
-import edu.ucne.dragonball_planets.presentation.planet_list.ListPlanetBodyScreen
+import edu.ucne.dragonball_planets.domain.planet.model.Planet
 
 @Composable
 fun DetailPlanetScreen(
     viewModel: DetailPlanetViewModel = hiltViewModel(),
+    onDrawer: () -> Unit,
     onBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DetailPlanetBodyScreen(
         state = state,
+        onDrawer = onDrawer,
         onBack = onBack
     )
 }
@@ -36,6 +37,7 @@ fun DetailPlanetScreen(
 @Composable
 fun DetailPlanetBodyScreen(
     state: DetailPlanetUiState,
+    onDrawer: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -43,8 +45,13 @@ fun DetailPlanetBodyScreen(
             TopAppBar(
                 title = { Text("Detalle del Planeta") },
                 navigationIcon = {
+                    IconButton(onClick = onDrawer) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menú")
+                    }
+                },
+                actions = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, null)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Regresar")
                     }
                 }
             )
@@ -104,7 +111,7 @@ fun DetailPlanetBodyScreen(
 @Preview(showBackground = true)
 @Composable
 fun ListPlanetBodyScreenPreview() {
-    val samplePlanets = listOf(
+    val samplePlanet = (
         Planet(
             id = 2,
             name = "Tierra",
@@ -113,17 +120,16 @@ fun ListPlanetBodyScreenPreview() {
             image = ""
         )
     )
-    val state = ListPlanetUiState(
-        planets = samplePlanets,
-        filterName = ""
+    val state = DetailPlanetUiState(
+        planet = samplePlanet,
     )
 
     MaterialTheme {
         Surface {
-            ListPlanetBodyScreen(
+            DetailPlanetBodyScreen(
                 state = state,
-                onEvent = {},
-                onPlanetClick = {}
+                onDrawer = {},
+                onBack = {}
             )
         }
     }
