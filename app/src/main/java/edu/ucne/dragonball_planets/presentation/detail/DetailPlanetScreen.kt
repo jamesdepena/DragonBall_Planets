@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
+import edu.ucne.dragonball_planets.domain.model.Planet
 import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
 import edu.ucne.dragonball_planets.presentation.planet_list.ListPlanetBodyScreen
 
@@ -99,32 +99,32 @@ fun DetailPlanetBodyScreen(
             }
         }
     }
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun ListPlanetBodyScreenPreview() {
-        val samplePlanets = listOf(
-            PlanetDto(
-                id = 2,
-                name = "Tierra",
-                isDestroyed = false,
-                description = "Planeta de los guerreros Z",
-                image = ""
+@Preview(showBackground = true)
+@Composable
+fun ListPlanetBodyScreenPreview() {
+    val samplePlanets = listOf(
+        Planet(
+            id = 2,
+            name = "Tierra",
+            isDestroyed = false,
+            description = "Planeta de los guerreros Z",
+            image = ""
+        )
+    )
+    val state = ListPlanetUiState(
+        planets = samplePlanets,
+        filterName = ""
+    )
+
+    MaterialTheme {
+        Surface {
+            ListPlanetBodyScreen(
+                state = state,
+                onEvent = {},
+                onPlanetClick = {}
             )
-        )
-        val state = ListPlanetUiState(
-            planets = samplePlanets,
-            filterName = ""
-        )
-
-        MaterialTheme {
-            Surface {
-                ListPlanetBodyScreen(
-                    state = state,
-                    onEvent = {},
-                    onPlanetClick = {}
-                )
-            }
         }
     }
 }
