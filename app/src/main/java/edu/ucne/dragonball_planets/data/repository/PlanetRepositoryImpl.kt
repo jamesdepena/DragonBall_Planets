@@ -1,47 +1,42 @@
 package edu.ucne.dragonball_planets.data.repository
 
-import edu.ucne.dragonball_planets.data.remote.DragonBallApi
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
+import edu.ucne.dragonball_planets.data.remote.remotedatasource.PlanetRemoteDataSource
+import edu.ucne.dragonball_planets.domain.model.Planet
 import edu.ucne.dragonball_planets.domain.repository.PlanetRepository
-import jakarta.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 class PlanetRepositoryImpl @Inject constructor(
-    private val api: DragonBallApi
+    private val remoteDataSource: PlanetRemoteDataSource
 ) : PlanetRepository {
 
-    override suspend fun getPlanets(
+    override fun getPlanets(
         page: Int,
         limit: Int,
-        name: String?,
-        isDestroyed: Boolean?
-    ): Resource<List<PlanetDto>> {
-        return try {
-            val listaFinal: List<PlanetDto> = if (!name.isNullOrBlank()) {
-                val response = api.searchPlanets(name)
-                response.body() ?: emptyList()
-            } else {
-                val response = api.getPlanets(page, limit)
-                response.body()?.items ?: emptyList()
-            }
+        name: String?
+    ): Flow<Resource<List<Planet>>> = flow {
 
-            Resource.Success(listaFinal)
-        } catch (e: Exception) {
-            Resource.Error("Error de conexion: ${e.localizedMessage}")
+        emit(Resource.Loading())
+
+        val response = remoteDataSource.getPlanets(page, limit, name)
+        response.onSuccess { planets ->
+            emit(Resource.Success(planets.map { it.toDomain() }))
+        }.onFailure {
+            emit(Resource.Error(it.message ?: "Error desconocido"))
         }
     }
 
-    override suspend fun getPlanetDetail(id: Int): Resource<PlanetDto> {
-        return try {
-            val response = api.getPlanetDetail(id)
-            val planet = response.body()
-            if (response.isSuccessful && planet != null) {
-                Resource.Success(planet)
-            } else {
-                Resource.Error("Planeta no encontrado")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Error: ${e.message}")
+    override fun getPlanetDetail(id: Int): Flow<Resource<Planet>> = flow {
+
+        emit(Resource.Loading())
+
+        val response = remoteDataSource.getPlanetDetail(id)
+        response.onSuccess { planet ->
+            emit(Resource.Success(planet.toDomain()))
+        }.onFailure {
+            emit(Resource.Error(it.message ?: "Error desconocido"))
         }
     }
 }
