@@ -1,10 +1,10 @@
-package edu.ucne.dragonball_planets.presentation.list
+package edu.ucne.dragonball_planets.presentation.planet.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.ucne.dragonball_planets.data.remote.Resource
-import edu.ucne.dragonball_planets.domain.usecase.GetPlanetsUseCase
+import edu.ucne.dragonball_planets.domain.planet.usecase.GetPlanetsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -40,38 +40,36 @@ class ListPlanetViewModel @Inject constructor(
 
     private fun loadPlanets() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
             val current = _state.value
 
-            val result = getPlanetsUseCase(
+            getPlanetsUseCase(
                 name = current.filterName.takeIf { it.isNotBlank() }
-            )
+            ).collect { result ->
 
-            when (result) {
-                is Resource.Success -> {
-                    val data = result.data ?: emptyList()
-                    val filteredData = if (current.filterIsDestroyed != null) {
-                        data.filter { it.isDestroyed == current.filterIsDestroyed }
-                    } else {
-                        data
+                when (result) {
+                    is Resource.Loading -> _state.update { it.copy(isLoading = true) }
+
+                    is Resource.Success -> {
+                        val data = result.data ?: emptyList()
+                        val filtered = if (current.filterIsDestroyed != null) {
+                            data.filter { it.isDestroyed == current.filterIsDestroyed }
+                        } else {
+                            data
+                        }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                planets = filtered
+                            )
+                        }
                     }
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            planets = filteredData
-                        )
-                    }
-                }
-                is Resource.Error -> {
-                    _state.update {
+
+                    is Resource.Error -> _state.update {
                         it.copy(
                             isLoading = false,
                             error = result.message
                         )
                     }
-                }
-                is Resource.Loading -> {
-                    _state.update { it.copy(isLoading = true) }
                 }
             }
         }

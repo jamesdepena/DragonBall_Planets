@@ -1,10 +1,11 @@
-package edu.ucne.dragonball_planets.presentation.planet_list
+package edu.ucne.dragonball_planets.presentation.planet.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,20 +16,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiEvent
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
-import edu.ucne.dragonball_planets.presentation.list.ListPlanetViewModel
+import edu.ucne.dragonball_planets.domain.planet.model.Planet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListPlanetScreen(
     viewModel: ListPlanetViewModel = hiltViewModel(),
+    onDrawer: () -> Unit,
     onPlanetClick: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     ListPlanetBodyScreen(
         state = state,
+        onDrawer = onDrawer,
         onEvent = viewModel::onEvent,
         onPlanetClick = onPlanetClick
     )
@@ -38,13 +38,19 @@ fun ListPlanetScreen(
 @Composable
 fun ListPlanetBodyScreen(
     state: ListPlanetUiState,
+    onDrawer: () -> Unit,
     onEvent: (ListPlanetUiEvent) -> Unit,
     onPlanetClick: (Int) -> Unit
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Dragon Ball Planets") }
+                title = { Text("Dragon Ball Planets") },
+                navigationIcon = {
+                    IconButton(onClick = onDrawer) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menú")
+                    }
+                }
             )
         }
     ) { padding ->
@@ -81,7 +87,9 @@ fun ListPlanetBodyScreen(
                 Text(
                     text = state.error,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
@@ -103,7 +111,7 @@ fun ListPlanetBodyScreen(
 
 @Composable
 fun PlanetItem(
-    planet: PlanetDto,
+    planet: Planet,
     onClick: () -> Unit
 ) {
     ElevatedCard(
@@ -145,7 +153,7 @@ fun PlanetItem(
 @Composable
 fun ListPlanetBodyScreenPreview() {
     val samplePlanets = listOf(
-        PlanetDto(
+        Planet(
             id = 2,
             name = "Tierra",
             isDestroyed = false,
@@ -162,6 +170,7 @@ fun ListPlanetBodyScreenPreview() {
         Surface {
             ListPlanetBodyScreen(
                 state = state,
+                onDrawer = {},
                 onEvent = {},
                 onPlanetClick = {}
             )
