@@ -2,14 +2,12 @@ package edu.ucne.dragonball_planets.data.remote.remotedatasource
 
 import edu.ucne.dragonball_planets.data.remote.DragonBallApi
 import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetResponseDto
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class PlanetRemoteDataSource @Inject constructor(
     private val api: DragonBallApi
 ) {
-
     suspend fun getPlanets(
         page: Int,
         limit: Int,
@@ -20,7 +18,7 @@ class PlanetRemoteDataSource @Inject constructor(
                 val response = api.searchPlanets(name)
                 if (!response.isSuccessful)
                     return Result.failure(Exception("Error de red ${response.code()}"))
-                response.body() ?: emptyList()
+                response.body()?.items ?: emptyList()
             } else {
                 val response = api.getPlanets(page, limit)
                 if (!response.isSuccessful)
