@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
+import edu.ucne.dragonball_planets.domain.model.Planet
 import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiEvent
 import edu.ucne.dragonball_planets.presentation.list.ListPlanetUiState
 import edu.ucne.dragonball_planets.presentation.list.ListPlanetViewModel
@@ -81,7 +81,9 @@ fun ListPlanetBodyScreen(
                 Text(
                     text = state.error,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
@@ -103,7 +105,7 @@ fun ListPlanetBodyScreen(
 
 @Composable
 fun PlanetItem(
-    planet: PlanetDto,
+    planet: Planet,
     onClick: () -> Unit
 ) {
     ElevatedCard(
@@ -145,7 +147,7 @@ fun PlanetItem(
 @Composable
 fun ListPlanetBodyScreenPreview() {
     val samplePlanets = listOf(
-        PlanetDto(
+        Planet(
             id = 2,
             name = "Tierra",
             isDestroyed = false,
