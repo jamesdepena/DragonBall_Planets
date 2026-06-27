@@ -1,9 +1,9 @@
 package edu.ucne.dragonball_planets.presentation.detail
 
-import edu.ucne.dragonball_planets.data.remote.dto.PlanetDto
+import edu.ucne.dragonball_planets.domain.model.Planet
 
 data class DetailPlanetUiState(
     val isLoading: Boolean = false,
-    val planet: PlanetDto? = null,
+    val planet: Planet? = null,
     val error: String? = null
 )
